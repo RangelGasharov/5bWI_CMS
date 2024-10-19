@@ -8,19 +8,19 @@ type CardType = {
 }
 
 type CardContainerType = {
-    cardData: CardType[]
+    cardsData: CardType[]
 }
 
-export default function CardContainer({ cardData }: CardContainerType) {
+export default function CardContainer({ cardsData }: CardContainerType) {
     return (
-        <div className='grid sm:grid-cols-2 md:grid-cols-2, lg:grid-cols-4 2xl:grid-cols-6 gap-x-4 gap-y-6 p-10 justify-items-center'>
-            {cardData.map((data) => {
+        <div className='grid xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-4, lg:grid-cols-6 2xl:grid-cols-8 gap-x-4 gap-y-6 p-10 justify-items-center'>
+            {cardsData.map((cardData) => {
                 return (
                     <Card
-                        key={data.textTitle + data.imageURL}
-                        imageURL={data.imageURL}
-                        textTitle={data.textTitle}
-                        descriptionText={data.descriptionText}
+                        key={cardData.textTitle + cardData.imageURL}
+                        imageURL={cardData.imageURL}
+                        textTitle={cardData.textTitle}
+                        descriptionText={cardData.descriptionText}
                     />
                 )
             })}

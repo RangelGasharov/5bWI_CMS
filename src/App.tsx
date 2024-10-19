@@ -21,6 +21,16 @@ let cardData = [
     imageURL: 'https://images.unsplash.com/photo-1726853546098-380e29da9e31?q=80&w=3540&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
     textTitle: 'Lorem ipsum dolor sit amet',
     descriptionText: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.',
+  },
+  {
+    imageURL: 'https://images.unsplash.com/photo-1728985630341-075aa9277eda?q=80&w=3387&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+    textTitle: 'Lorem ipsum dolor sit amet',
+    descriptionText: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.',
+  },
+  {
+    imageURL: 'https://images.unsplash.com/photo-1729008013335-aec0b983d1d9?q=80&w=3387&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+    textTitle: 'Lorem ipsum dolor sit amet',
+    descriptionText: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.',
   }
 ]
 
@@ -31,7 +41,7 @@ function App() {
         <div className='text-white text-4xl font-bold text-right'>HTL Dornbirn 5bWI</div>
       </div>
       <CardContainer
-        cardData={cardData} />
+        cardsData={cardData} />
     </div>
   )
 }
