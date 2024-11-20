@@ -13,7 +13,7 @@ type CardContainerType = {
 
 export default function CardContainer({ cardsData }: CardContainerType) {
     return (
-        <div className='grid xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-4, lg:grid-cols-6 2xl:grid-cols-8 gap-x-4 gap-y-6 p-10 justify-items-center'>
+        <div className='grid xs:grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-6 gap-x-4 gap-y-6 p-10 justify-items-center'>
             {cardsData.map((cardData) => {
                 return (
                     <Card
