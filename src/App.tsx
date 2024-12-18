@@ -4,14 +4,16 @@ import { useEffect, useState } from 'react';
 
 type SubjectType = {
   id: number,
-  name: string
+  created_at: Date,
+  name: string,
+  description: string
 }
 
 const supabase = createClient(import.meta.env.VITE_SUPABASE_PROJECT_URL, import.meta.env.VITE_SUPABASE_ANON_KEY)
 
 function App() {
 
-  const [subjects, setSubjects] = useState([]);
+  const [subjects, setSubjects]: any = useState([]);
 
   useEffect(() => {
     getSubjects();
@@ -23,11 +25,16 @@ function App() {
   }
 
   return (
-    <ul>
-      {subjects?.map((subject: SubjectType) => (
-        <div key={subject.id}>{subject.name}</div>
-      ))}
-    </ul>
+    <div>
+      <div className='flex justify-around items-center py-6 bg-sunglow font-nunito'>
+        <div className='flex gap-10'>
+          {subjects?.data?.map((subject: SubjectType) => (
+            <div className='cursor-pointer' key={subject.id}>{subject.name}</div>
+          ))}
+        </div>
+        <div className='font-bold text-3xl font-pt_sans'>HTL Dornbirn</div>
+      </div>
+    </div>
   )
 }
 

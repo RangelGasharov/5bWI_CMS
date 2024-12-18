@@ -9,8 +9,17 @@ module.exports = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        nunito: ["Nunito", "sans-serif"],
+        pt_sans: ["PT Sans", "sans-serif"]
+      },
       colors: {
-        "drab-dark-brown": "#2D2B03"
+        "drab-dark-brown": "#2D2B03",
+        "penn-red": "#960200",
+        "british-racing-green": "#034732",
+        "sunglow": "#FFD046",
+        "light orange": "#FCD0A1",
+        "russian-violet": "#241E4E"
       },
       screens: {
         "xs": "480px"
