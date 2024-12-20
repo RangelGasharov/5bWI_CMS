@@ -26,13 +26,13 @@ function App() {
 
   return (
     <div>
-      <div className='flex justify-around items-center py-6 bg-sunglow font-nunito'>
+      <div className='flex justify-around items-center py-6 bg-sunglow'>
         <div className='flex gap-10'>
           {subjects?.data?.map((subject: SubjectType) => (
             <div className='cursor-pointer' key={subject.id}>{subject.name}</div>
           ))}
         </div>
-        <div className='font-bold text-3xl font-pt_sans'>HTL Dornbirn</div>
+        <div className=' text-3xl font-oswald'>HTL Dornbirn</div>
       </div>
     </div>
   )

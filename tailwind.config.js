@@ -11,7 +11,8 @@ module.exports = {
     extend: {
       fontFamily: {
         nunito: ["Nunito", "sans-serif"],
-        pt_sans: ["PT Sans", "sans-serif"]
+        ptsans: ["PT Sans", "sans-serif"],
+        oswald: ["Oswald", "sans-serif"]
       },
       colors: {
         "drab-dark-brown": "#2D2B03",
