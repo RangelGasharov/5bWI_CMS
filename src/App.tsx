@@ -2,21 +2,9 @@ import { createClient } from '@supabase/supabase-js';
 import './App.css'
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-
-type SubjectType = {
-  id: number,
-  created_at: Date,
-  name: string,
-  description: string
-}
-
-type HomeworkType = {
-  id: number,
-  created_at: Date,
-  short_description: string,
-  subject_fk: number,
-  content: string
-}
+import { SubjectType } from './services/SubjectType';
+import { HomeworkType } from './services/HomewrokType';
+import HomeworkDescriptionCard from './components/HomeworkDescriptionCard';
 
 const supabase = createClient(import.meta.env.VITE_SUPABASE_PROJECT_URL, import.meta.env.VITE_SUPABASE_ANON_KEY)
 
@@ -24,6 +12,7 @@ function App() {
 
   const [subjects, setSubjects]: any = useState([]);
   const [homeworks, setHomeworks]: any = useState([]);
+  const [filteredHomeworks, setFilteredHomeworks]: any = useState([]);
   const [searchParams, setSearchParams] = useSearchParams();
 
   useEffect(() => {
@@ -34,10 +23,10 @@ function App() {
   useEffect(() => {
     const selectedSubjectId = searchParams.get('subjectId');
     if (selectedSubjectId) {
-      const filteredHomeworks = homeworks.data?.filter(
+      const filteredBySubject = homeworks.data?.filter(
         (homework: any) => homework.subject_fk === parseInt(selectedSubjectId)
       );
-      setHomeworks({ ...homeworks, data: filteredHomeworks });
+      setFilteredHomeworks({ ...homeworks, data: filteredBySubject });
     } else {
       getHomeworks();
     }
@@ -51,6 +40,15 @@ function App() {
   async function getHomeworks() {
     const homeworks: any = await supabase.from("homework").select();
     setHomeworks(homeworks);
+    const selectedSubjectId = searchParams.get('subjectId');
+    if (selectedSubjectId) {
+      const filteredBySubject = homeworks.data?.filter(
+        (homework: any) => homework.subject_fk === parseInt(selectedSubjectId)
+      );
+      setFilteredHomeworks({ ...homeworks, data: filteredBySubject });
+    } else {
+      setFilteredHomeworks(homeworks);
+    }
   }
 
   const handleSubjectClick = (subjectId?: number) => {
@@ -90,13 +88,8 @@ function App() {
         ))}
       </div>
       <div className='flex flex-col gap-4 p-4'>
-        {homeworks?.data?.map((homework: HomeworkType) => (
-          <button
-            className='shrink-0 cursor-pointer hover:text-blue-600 transition-colors whitespace-nowrap'
-            key={homework.id}
-          >
-            {homework.short_description}
-          </button>
+        {filteredHomeworks?.data?.map((homework: HomeworkType) => (
+          <HomeworkDescriptionCard key={homework.id} homework={homework} />
         ))}
       </div>
     </div>
