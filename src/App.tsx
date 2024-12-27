@@ -9,7 +9,6 @@ import HomeworkDescriptionCard from './components/HomeworkDescriptionCard';
 const supabase = createClient(import.meta.env.VITE_SUPABASE_PROJECT_URL, import.meta.env.VITE_SUPABASE_ANON_KEY)
 
 function App() {
-
   const [subjects, setSubjects]: any = useState([]);
   const [homeworks, setHomeworks]: any = useState([]);
   const [filteredHomeworks, setFilteredHomeworks]: any = useState([]);
@@ -23,18 +22,6 @@ function App() {
     getHomeworks();
   }, []);
 
-  useEffect(() => {
-    const selectedSubjectId = searchParams.get('subjectId');
-    if (selectedSubjectId) {
-      const filteredBySubject = homeworks.data?.filter(
-        (homework: any) => homework.subject_fk === parseInt(selectedSubjectId)
-      );
-      setFilteredHomeworks({ ...homeworks, data: filteredBySubject });
-    } else {
-      getHomeworks();
-    }
-  }, [searchParams]);
-
   async function getSubjects() {
     const subjects: any = await supabase.from("subject").select();
     setSubjects(subjects);
@@ -43,42 +30,56 @@ function App() {
   async function getHomeworks() {
     const homeworks: any = await supabase.from("homework").select();
     setHomeworks(homeworks);
-    const selectedSubjectId = searchParams.get('subjectId');
-    if (selectedSubjectId) {
-      const filteredBySubject = homeworks.data?.filter(
-        (homework: any) => homework.subject_fk === parseInt(selectedSubjectId)
-      );
-      setFilteredHomeworks({ ...homeworks, data: filteredBySubject });
-    } else {
-      setFilteredHomeworks(homeworks);
-    }
+    setFilteredHomeworks(homeworks);
+    setFilteredHomeworks(homeworks);
+    setFilteredHomeworks(homeworks);
   }
 
-  const handleSubjectClick = (subjectId?: number) => {
+  const applyFilters = (newParams: URLSearchParams) => {
+    const subjectId = newParams.get('subjectId');
+    const startDate = newParams.get('startDate');
+    const endDate = newParams.get('endDate');
+    let filtered = [...homeworks.data];
+
     if (subjectId) {
-      setSearchParams({ subjectId: subjectId.toString() });
+      filtered = filtered.filter((homework: HomeworkType) => homework.subject_fk === parseInt(subjectId));
+    }
+
+    if (startDate && endDate) {
+      filtered = filtered.filter((homework: HomeworkType) => homework.due_date >= startDate && homework.due_date <= endDate);
+    }
+
+    setFilteredHomeworks({ ...homeworks, data: filtered });
+  };
+
+  const handleSubjectClick = (subjectId?: number) => {
+    const newParams = new URLSearchParams(searchParams);
+
+    if (subjectId) {
+      newParams.set('subjectId', subjectId.toString());
       setSelectedSubject(subjects.data.find((subject: SubjectType) => subject.id === subjectId));
     } else {
-      setSearchParams({});
+      newParams.delete('subjectId');
       setSelectedSubject(null);
     }
+
+    setSearchParams(newParams);
+    applyFilters(newParams);
     setIsOpen(false);
   };
 
   const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    const currentParams = Object.fromEntries(searchParams.entries());
+    const newParams = new URLSearchParams(searchParams);
 
     if (value) {
-      setSearchParams({
-        ...currentParams,
-        [name]: value
-      });
+      newParams.set(name, value);
     } else {
-      const newParams = { ...currentParams };
-      delete newParams[name];
-      setSearchParams(newParams);
+      newParams.delete(name);
     }
+
+    setSearchParams(newParams);
+    applyFilters(newParams);
   };
 
   return (
@@ -90,10 +91,12 @@ function App() {
         <div className='relative' ref={dropdownRef}>
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className='w-48 px-4 py-2 text-left bg-white border rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500 whitespace-nowrap overflow-hidden text-ellipsis relative'
+            className='w-48 px-4 py-2 bg-white border rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500 flex justify-between items-center'
           >
-            {selectedSubject ? selectedSubject.name : 'Alle Fächer'}
-            <span className='float-right absolute right-[.5rem]'>▼</span>
+            <span className='whitespace-nowrap overflow-hidden text-ellipsis'>
+              {selectedSubject ? selectedSubject.name : 'Alle Fächer'}
+            </span>
+            <span>▼</span>
           </button>
 
           {isOpen && (
