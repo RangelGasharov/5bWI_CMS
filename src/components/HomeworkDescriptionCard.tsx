@@ -1,4 +1,4 @@
-import { HomeworkType } from '../services/HomewrokType'
+import { HomeworkType } from '../services/HomeworkType'
 
 type HomeworkDescriptionCard = {
     homework: HomeworkType;

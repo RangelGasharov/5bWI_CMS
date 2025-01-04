@@ -1,7 +1,7 @@
 import './App.css'
 import { Route, Routes } from 'react-router-dom';
-import HomeworkOverviewPage from './components/HomeworkOverviewPage';
-import HomeworkAddPage from './components/HomeworkAddPage';
+import HomeworkOverviewPage from './pages/HomeworkOverviewPage';
+import HomeworkAddPage from './pages/HomeworkAddPage';
 
 function App() {
   return (

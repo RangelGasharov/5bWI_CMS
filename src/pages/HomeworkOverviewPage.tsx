@@ -2,8 +2,8 @@ import { createClient } from '@supabase/supabase-js';
 import { useEffect, useState, useRef } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import { SubjectType } from '../services/SubjectType';
-import { HomeworkType } from '../services/HomewrokType';
-import HomeworkDescriptionCard from './HomeworkDescriptionCard';
+import { HomeworkType } from '../services/HomeworkType';
+import HomeworkDescriptionCard from '../components/HomeworkDescriptionCard';
 
 const supabase = createClient(import.meta.env.VITE_SUPABASE_PROJECT_URL, import.meta.env.VITE_SUPABASE_ANON_KEY)
 
