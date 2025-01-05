@@ -138,7 +138,7 @@ function HomeworkOverviewPage() {
                         />
                     </div>
                 </div>
-                <Link to="/add-homework" className="text-blue-500">Add Homework</Link>
+                <Link to="/add-homework" className="text-blue-500">Hausübung hinzufügen</Link>
             </div>
             <div className='grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-4 p-4'>
                 {filteredHomeworks?.data?.map((homework: HomeworkType) => (
