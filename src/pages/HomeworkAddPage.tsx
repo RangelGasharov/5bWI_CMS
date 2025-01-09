@@ -41,9 +41,8 @@ const HomeworkAddPage = () => {
     }, []);
 
     return (
-        <div>
-            <div>Homework Add Page</div>
-            <div>
+        <div className='p-4'>
+            <div className='p-4 flex flex-col gap-4 rounded-[1rem] overflow-hidden border-black border-solid border-[1.5px]'>
                 <div>
                     <div>Fach</div>
                     <div ref={dropdownRef}>
@@ -94,10 +93,11 @@ const HomeworkAddPage = () => {
                         <textarea id="content" name="content" rows="4" cols="50" value={content} onChange={(e) => { setContent(e.target.value) }}></textarea>
                     </div>
                 </div>
-                <button onClick={postHomework}>Speichen</button>
+                <div>
+                    <button onClick={postHomework}>Speichen</button>
+                </div>
             </div>
         </div>
-
     );
 };
 
