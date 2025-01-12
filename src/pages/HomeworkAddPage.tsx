@@ -8,13 +8,13 @@ const HomeworkAddPage = () => {
     const [dueDate, setDueDate] = useState("");
     const [shortDescription, setShortDescription] = useState("");
     const [content, setContent] = useState("");
-    const [subjects, setSubjects] = useState();
+    const [subjects, setSubjects] = useState<any>();
     const [isOpen, setIsOpen] = useState(false);
-    const [selectedSubject, setSelectedSubject] = useState("");
+    const [selectedSubject, setSelectedSubject] = useState<SubjectType>();
     const dropdownRef = useRef<HTMLDivElement>(null);
 
     async function getSubjects() {
-        const subjects: any = await supabase.from("subject").select();
+        const subjects = await supabase.from("subject").select();
         setSubjects(subjects);
     }
 
@@ -22,7 +22,7 @@ const HomeworkAddPage = () => {
         const homeworkData = {
             due_date: dueDate,
             short_description: shortDescription,
-            subject_fk: selectedSubject.id,
+            subject_fk: selectedSubject?.id,
             content: content
         }
 
@@ -90,7 +90,7 @@ const HomeworkAddPage = () => {
                 <div>
                     <div>Inhalt</div>
                     <div>
-                        <textarea id="content" name="content" rows="4" cols="50" value={content} onChange={(e) => { setContent(e.target.value) }}></textarea>
+                        <textarea id="content" name="content" rows={4} cols={50} value={content} onChange={(e) => { setContent(e.target.value) }}></textarea>
                     </div>
                 </div>
                 <div>
