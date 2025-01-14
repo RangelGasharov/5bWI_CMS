@@ -1,6 +1,8 @@
 import { useState, useRef, useEffect } from 'react';
 import { createClient } from '@supabase/supabase-js';
 import { SubjectType } from '../services/SubjectType';
+import { Button, DialogTitle } from '@mui/material';
+import { Link } from 'react-router-dom';
 
 const supabase = createClient(import.meta.env.VITE_SUPABASE_PROJECT_URL, import.meta.env.VITE_SUPABASE_ANON_KEY)
 
@@ -42,6 +44,10 @@ const HomeworkAddPage = () => {
 
     return (
         <div className='p-4'>
+            <Link to={"/"}>
+                <Button>Zurück</Button>
+            </Link>
+            <DialogTitle>Hausübung bearbeiten</DialogTitle>
             <div className='p-4 flex flex-col gap-4 rounded-[1rem] overflow-hidden border-black border-solid border-[1.5px]'>
                 <div>
                     <div>Fach</div>
