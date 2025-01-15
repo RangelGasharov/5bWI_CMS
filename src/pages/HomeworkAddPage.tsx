@@ -1,30 +1,31 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { createClient } from '@supabase/supabase-js';
 import { SubjectType } from '../services/SubjectType';
-import { Button, DialogTitle } from '@mui/material';
+import { Button, DialogTitle, FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material';
 import { Link } from 'react-router-dom';
+import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import dayjs from 'dayjs';
 
 const supabase = createClient(import.meta.env.VITE_SUPABASE_PROJECT_URL, import.meta.env.VITE_SUPABASE_ANON_KEY)
 
 const HomeworkAddPage = () => {
-    const [dueDate, setDueDate] = useState("");
+    const [dueDate, setDueDate]: any = useState("");
     const [shortDescription, setShortDescription] = useState("");
     const [content, setContent] = useState("");
     const [subjects, setSubjects] = useState<any>();
-    const [isOpen, setIsOpen] = useState(false);
-    const [selectedSubject, setSelectedSubject] = useState<SubjectType>();
-    const dropdownRef = useRef<HTMLDivElement>(null);
+    const [selectedSubjectId, setSelectedSubjectId]: any = useState<string | null>("");
 
     async function getSubjects() {
         const subjects = await supabase.from("subject").select();
-        setSubjects(subjects);
+        setSubjects(subjects.data);
     }
 
     async function postHomework() {
         const homeworkData = {
             due_date: dueDate,
             short_description: shortDescription,
-            subject_fk: selectedSubject?.id,
+            subject_fk: selectedSubjectId,
             content: content
         }
 
@@ -42,6 +43,7 @@ const HomeworkAddPage = () => {
         getSubjects();
     }, []);
 
+
     return (
         <div className='p-4'>
             <Link to={"/"}>
@@ -49,59 +51,31 @@ const HomeworkAddPage = () => {
             </Link>
             <DialogTitle>Hausübung bearbeiten</DialogTitle>
             <div className='p-4 flex flex-col gap-4 rounded-[1rem] overflow-hidden border-black border-solid border-[1.5px]'>
-                <div>
-                    <div>Fach</div>
-                    <div ref={dropdownRef}>
-                        <button
-                            onClick={() => setIsOpen(!isOpen)}
-                            className='w-48 px-4 py-2 bg-white border rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500 flex justify-between items-center'
-                        >
-                            <span className='whitespace-nowrap overflow-hidden text-ellipsis'>
-                                {selectedSubject ? selectedSubject.name : ""}
-                            </span>
-                            <span>▼</span>
-                        </button>
+                <FormControl fullWidth>
+                    <InputLabel>Fach</InputLabel>
+                    <Select
+                        label="Fach"
+                        value={selectedSubjectId}
+                        onChange={(e: any) => setSelectedSubjectId(e.target.value)}
+                    >
+                        {subjects?.map((subject: SubjectType) => (
+                            <MenuItem key={subject.id} value={subject.id}>
+                                {subject.name}
+                            </MenuItem>
+                        ))}
+                    </Select>
+                </FormControl>
 
-                        {isOpen && (
-                            <div className='mt-1 w-48 bg-white border rounded-md shadow-lg z-10'>
-                                {subjects?.data?.map((subject: SubjectType) => (
-                                    <button
-                                        key={subject.id}
-                                        value={subject.id}
-                                        onClick={() => {
-                                            setSelectedSubject(subject);
-                                            setIsOpen(!isOpen);
-                                        }}
-                                        className='w-full px-4 py-2 text-left hover:bg-gray-100 focus:outline-none whitespace-nowrap overflow-hidden text-ellipsis'
-                                    >
-                                        {subject.name}
-                                    </button>
-                                ))}
-                            </div>
-                        )}
-                    </div>
-                </div>
-                <div>
-                    <div>Abgabedatum</div>
-                    <div>
-                        <input type="date" id="dueDate" name="dueDate" value={dueDate} onChange={(e) => { setDueDate(e.target.value) }} />
-                    </div>
-                </div>
-                <div>
-                    <div>Kurzbeschreibung</div>
-                    <div>
-                        <input type="text" id="shortDescription" name="shortDescription" value={shortDescription} onChange={(e) => { setShortDescription(e.target.value) }} />
-                    </div>
-                </div>
-                <div>
-                    <div>Inhalt</div>
-                    <div>
-                        <textarea id="content" name="content" rows={4} cols={50} value={content} onChange={(e) => { setContent(e.target.value) }}></textarea>
-                    </div>
-                </div>
-                <div>
-                    <button onClick={postHomework}>Speichen</button>
-                </div>
+                <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale='de'>
+                    <DatePicker
+                        label="Abgabedatum"
+                        value={dueDate ? dayjs(dueDate) : null}
+                        onChange={(newValue: any) => setDueDate(dayjs(newValue).format("YYYY-MM-DD"))}
+                    />
+                </LocalizationProvider>
+                <TextField label={"Kurzbeschreibung"} value={shortDescription} onChange={(e) => { setShortDescription(e.target.value) }}></TextField>
+                <TextField multiline maxRows={10} placeholder='Inhalt' value={content} onChange={(e) => { setContent(e.target.value) }}></TextField>
+                <Button variant='contained' onClick={postHomework}>Speichern</Button>
             </div>
         </div>
     );

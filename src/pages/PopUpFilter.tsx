@@ -12,7 +12,7 @@ type PopUpFilterType = {
 
 export default function PopUpFilter({ subjects }: PopUpFilterType) {
     const [searchParams, setSearchParams]: any = useSearchParams();
-    const [selectedSubjectId, setSelectedSubjectId] = useState(searchParams.get("subjectId") ?? "");
+    const [selectedSubjectId] = useState(searchParams.get("subjectId") ?? "");
     const [startDate, setStartDate] = useState(searchParams.get("startDate") ? dayjs(searchParams.get("startDate")) : null);
     const [endDate, setEndDate] = useState(searchParams.get("endDate") ? dayjs(searchParams.get("endDate")) : null);
 
@@ -29,19 +29,33 @@ export default function PopUpFilter({ subjects }: PopUpFilterType) {
     };
 
     const handleStartDateChange = (newDate: any) => {
-        const formattedDate: any = dayjs(newDate).format("YYYY-MM-DD")
-        setStartDate(formattedDate);
-        const newParams = new URLSearchParams(searchParams);
-        formattedDate ? newParams.set("startDate", formattedDate) : newParams.delete("startDate");
-        setSearchParams(newParams);
+        if (newDate === null || !dayjs(newDate).isValid()) {
+            setStartDate(null);
+            const newParams = new URLSearchParams(searchParams);
+            newParams.delete("startDate");
+            setSearchParams(newParams);
+        } else {
+            const formattedDate: any = dayjs(newDate).format("YYYY-MM-DD");
+            setStartDate(formattedDate);
+            const newParams = new URLSearchParams(searchParams);
+            newParams.set("startDate", formattedDate);
+            setSearchParams(newParams);
+        }
     };
 
     const handleEndDateChange = (newDate: any) => {
-        const formattedDate: any = dayjs(newDate).format("YYYY-MM-DD")
-        setEndDate(formattedDate);
-        const newParams = new URLSearchParams(searchParams);
-        formattedDate ? newParams.set("endDate", formattedDate) : newParams.delete("endDate");
-        setSearchParams(newParams);
+        if (newDate === null || !dayjs(newDate).isValid()) {
+            setEndDate(null);
+            const newParams = new URLSearchParams(searchParams);
+            newParams.delete("endDate");
+            setSearchParams(newParams);
+        } else {
+            const formattedDate: any = dayjs(newDate).format("YYYY-MM-DD");
+            setEndDate(formattedDate);
+            const newParams = new URLSearchParams(searchParams);
+            newParams.set("endDate", formattedDate);
+            setSearchParams(newParams);
+        }
     };
 
     return (
@@ -69,12 +83,12 @@ export default function PopUpFilter({ subjects }: PopUpFilterType) {
                     <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale='de'>
                         <DatePicker
                             label="Startdatum"
-                            defaultValue={startDate}
+                            value={startDate ? dayjs(startDate) : null}
                             onChange={(newValue: any) => handleStartDateChange(newValue)}
                         />
                         <DatePicker
                             label="EndDatum"
-                            defaultValue={endDate}
+                            value={endDate ? dayjs(endDate) : null}
                             onChange={(newValue: any) => handleEndDateChange(newValue)}
                         />
                     </LocalizationProvider>
