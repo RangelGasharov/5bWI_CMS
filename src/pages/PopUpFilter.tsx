@@ -1,4 +1,4 @@
-import { FormControl, InputLabel, MenuItem, Select } from '@mui/material'
+import { Button, Dialog, DialogActions, DialogContent, FormControl, InputLabel, MenuItem, Select } from '@mui/material'
 import { useState } from 'react'
 import { SubjectType } from '../services/SubjectType'
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers'
@@ -15,6 +15,7 @@ export default function PopUpFilter({ subjects }: PopUpFilterType) {
     const [selectedSubjectId] = useState(searchParams.get("subjectId") ?? "");
     const [startDate, setStartDate] = useState(searchParams.get("startDate") ? dayjs(searchParams.get("startDate")) : null);
     const [endDate, setEndDate] = useState(searchParams.get("endDate") ? dayjs(searchParams.get("endDate")) : null);
+    const [open, setOpen] = useState(false);
 
     const handleSubjectChange = (subjectId?: number) => {
         const newParams = new URLSearchParams(searchParams);
@@ -58,42 +59,72 @@ export default function PopUpFilter({ subjects }: PopUpFilterType) {
         }
     };
 
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+    };
+
+    const handleFilterReset = () => {
+        setStartDate(null);
+        setEndDate(null);
+        setSearchParams("");
+        window.location.reload();
+        handleClose();
+    }
+
     return (
         <div>
-            <div className='flex flex-wrap gap-4 items-center'>
-                <FormControl fullWidth>
-                    <InputLabel>Fach</InputLabel>
-                    <Select
-                        label="Fach"
-                        defaultValue={selectedSubjectId}
-                        onChange={(e: any) => handleSubjectChange(e.target.value)}
-                    >
-                        <MenuItem value="">
-                            <em>Alle</em>
-                        </MenuItem>
-                        {subjects?.map((subject: SubjectType) => (
-                            <MenuItem key={subject.id} value={subject.id}>
-                                {subject.name}
-                            </MenuItem>
-                        ))}
-                    </Select>
-                </FormControl>
+            <Button
+                variant="outlined"
+                onClick={handleClickOpen}
+            >
+                Filter öffnen
+            </Button>
+            <Dialog open={open} onClose={handleClose}>
+                <DialogContent>
+                    <div className='grid gap-4 items-center'>
+                        <FormControl fullWidth>
+                            <InputLabel>Fach</InputLabel>
+                            <Select
+                                label="Fach"
+                                defaultValue={selectedSubjectId}
+                                onChange={(e: any) => handleSubjectChange(e.target.value)}
+                            >
+                                <MenuItem value="">
+                                    <em>Alle</em>
+                                </MenuItem>
+                                {subjects?.map((subject: SubjectType) => (
+                                    <MenuItem key={subject.id} value={subject.id}>
+                                        {subject.name}
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
 
-                <div className='flex gap-2'>
-                    <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale='de'>
-                        <DatePicker
-                            label="Startdatum"
-                            value={startDate ? dayjs(startDate) : null}
-                            onChange={(newValue: any) => handleStartDateChange(newValue)}
-                        />
-                        <DatePicker
-                            label="EndDatum"
-                            value={endDate ? dayjs(endDate) : null}
-                            onChange={(newValue: any) => handleEndDateChange(newValue)}
-                        />
-                    </LocalizationProvider>
-                </div>
-            </div>
+                        <div className='flex gap-2'>
+                            <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale='de'>
+                                <DatePicker
+                                    label="Startdatum"
+                                    value={startDate ? dayjs(startDate) : null}
+                                    onChange={(newValue: any) => handleStartDateChange(newValue)}
+                                />
+                                <DatePicker
+                                    label="EndDatum"
+                                    value={endDate ? dayjs(endDate) : null}
+                                    onChange={(newValue: any) => handleEndDateChange(newValue)}
+                                />
+                            </LocalizationProvider>
+                        </div>
+                    </div>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleClose}>Schließen</Button>
+                    <Button onClick={handleFilterReset} variant="contained" sx={{ backgroundColor: "red", ":hover": { bgcolor: "red", filter: "brightness(1.1)" } }}>zurücksetzen</Button>
+                </DialogActions>
+            </Dialog>
         </div>
     )
 }
