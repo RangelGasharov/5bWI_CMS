@@ -12,7 +12,7 @@ type PopUpFilterType = {
 
 export default function PopUpFilter({ subjects }: PopUpFilterType) {
     const [searchParams, setSearchParams]: any = useSearchParams();
-    const [selectedSubjectId] = useState(searchParams.get("subjectId") ?? "");
+    const [selectedSubjectId, setSelectedSubjectId] = useState(searchParams.get("subjectId") ?? "");
     const [startDate, setStartDate] = useState(searchParams.get("startDate") ? dayjs(searchParams.get("startDate")) : null);
     const [endDate, setEndDate] = useState(searchParams.get("endDate") ? dayjs(searchParams.get("endDate")) : null);
     const [open, setOpen] = useState(false);
@@ -22,8 +22,10 @@ export default function PopUpFilter({ subjects }: PopUpFilterType) {
 
         if (subjectId) {
             newParams.set('subjectId', subjectId.toString());
+            setSelectedSubjectId(subjectId);
         } else {
             newParams.delete('subjectId');
+            setSelectedSubjectId("");
         }
 
         setSearchParams(newParams);
@@ -112,7 +114,7 @@ export default function PopUpFilter({ subjects }: PopUpFilterType) {
                                     onChange={(newValue: any) => handleStartDateChange(newValue)}
                                 />
                                 <DatePicker
-                                    label="EndDatum"
+                                    label="Enddatum"
                                     value={endDate ? dayjs(endDate) : null}
                                     onChange={(newValue: any) => handleEndDateChange(newValue)}
                                 />
