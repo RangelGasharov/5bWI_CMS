@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { HomeworkType } from '../services/HomeworkType'
 
 type HomeworkDescriptionCard = {
@@ -7,9 +8,11 @@ type HomeworkDescriptionCard = {
 export default function HomeworkDescriptionCard({ homework }: HomeworkDescriptionCard) {
     return (
         <div className='rounded-[1rem] overflow-hidden border-black border-solid border-[1.5px]'>
-            <div className='py-[.5rem] px-[1rem] font-ptsans font-bold cursor-pointer hover:text-blue-600 transition-colors bg-sunglow'>
-                {homework.short_description}
-            </div>
+            <Link to={`/edit-homework/${homework.id}`}>
+                <div className='py-[.5rem] px-[1rem] font-ptsans font-bold cursor-pointer hover:text-blue-600 transition-colors bg-sunglow'>
+                    {homework.short_description}
+                </div>
+            </Link>
             <div className='py-[.5rem] px-[1rem] font-nunito text-sm'>
                 {homework.content}
             </div>
