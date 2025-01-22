@@ -58,11 +58,12 @@ const HomeworkAddPage = () => {
                         value={selectedSubjectId}
                         onChange={(e: any) => setSelectedSubjectId(e.target.value)}
                     >
-                        {subjects?.map((subject: SubjectType) => (
-                            <MenuItem key={subject.id} value={subject.id}>
-                                {subject.name}
-                            </MenuItem>
-                        ))}
+                        {subjects?.sort((a: SubjectType, b: SubjectType) => a.name.localeCompare(b.name))
+                            .map((subject: SubjectType) => (
+                                <MenuItem key={subject.id} value={subject.id}>
+                                    {subject.name}
+                                </MenuItem>
+                            ))}
                     </Select>
                 </FormControl>
 

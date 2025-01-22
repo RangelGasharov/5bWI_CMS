@@ -98,11 +98,12 @@ export default function PopUpFilter({ subjects }: PopUpFilterType) {
                                 <MenuItem value="">
                                     <em>Alle</em>
                                 </MenuItem>
-                                {subjects?.map((subject: SubjectType) => (
-                                    <MenuItem key={subject.id} value={subject.id}>
-                                        {subject.name}
-                                    </MenuItem>
-                                ))}
+                                {subjects?.sort((a: SubjectType, b: SubjectType) => a.name.localeCompare(b.name))
+                                    .map((subject: SubjectType) => (
+                                        <MenuItem key={subject.id} value={subject.id}>
+                                            {subject.name}
+                                        </MenuItem>
+                                    ))}
                             </Select>
                         </FormControl>
 
