@@ -87,7 +87,7 @@ const HomeworkEditPage = () => {
                 && (
                     <div>
                         <DialogTitle>Hausübung bearbeiten</DialogTitle>
-                        <div className='p-4 flex flex-col gap-4 rounded-[1rem] overflow-hidden border-black border-solid border-[1.5px]'>
+                        <div className='p-4 flex flex-col gap-4 rounded-[1rem] overflow-hidden shadow-sm shadow-black'>
                             <FormControl fullWidth>
                                 <InputLabel>Fach</InputLabel>
                                 <Select

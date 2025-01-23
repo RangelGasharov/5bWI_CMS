@@ -3,9 +3,10 @@ import { useEffect, useState } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import { HomeworkType } from '../services/HomeworkType';
 import HomeworkDescriptionCard from '../components/HomeworkDescriptionCard';
-import { Button } from '@mui/material';
+import { Button, DialogTitle } from '@mui/material';
 import 'dayjs/locale/de';
 import PopUpFilter from './PopUpFilter';
+import AddIcon from '@mui/icons-material/Add';
 
 const supabase = createClient(import.meta.env.VITE_SUPABASE_PROJECT_URL, import.meta.env.VITE_SUPABASE_ANON_KEY)
 
@@ -70,9 +71,10 @@ function HomeworkOverviewPage() {
     return (
         <div>
             <div className='p-4 flex flex-wrap gap-4 items-center'>
+                <DialogTitle>Übersicht Hausübungen</DialogTitle>
                 <PopUpFilter subjects={subjects} />
                 <Link to="/add-homework" className="text-blue-500">
-                    <Button>Hausübung hinzufügen</Button>
+                    <Button variant="outlined" sx={{ display: "flex", gap: ".5rem" }}><AddIcon /> Hausübung hinzufügen</Button>
                 </Link>
             </div>
             <div className='grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-4 p-4'>

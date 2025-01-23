@@ -5,6 +5,7 @@ import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { useSearchParams } from 'react-router-dom'
 import dayjs from 'dayjs'
+import TuneIcon from '@mui/icons-material/Tune';
 
 type PopUpFilterType = {
     subjects: any
@@ -82,7 +83,9 @@ export default function PopUpFilter({ subjects }: PopUpFilterType) {
             <Button
                 variant="outlined"
                 onClick={handleClickOpen}
+                sx={{ display: "flex", gap: ".5rem" }}
             >
+                <TuneIcon />
                 Filter öffnen
             </Button>
             <Dialog open={open} onClose={handleClose}>
