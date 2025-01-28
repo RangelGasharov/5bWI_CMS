@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { createClient } from '@supabase/supabase-js';
 import { SubjectType } from '../services/SubjectType';
-import { Button, DialogTitle, FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material';
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material';
 import { Link, useParams } from 'react-router-dom';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -16,6 +16,7 @@ const HomeworkEditPage = () => {
     const [subjects, setSubjects] = useState<any>();
     const [selectedSubjectId, setSelectedSubjectId]: any = useState<string | null>("");
     const [homework, setHomework]: any = useState();
+    const [open, setOpen] = useState(false);
     const params = useParams();
     const homeworkId = params.id;
 
@@ -38,7 +39,7 @@ const HomeworkEditPage = () => {
         setSubjects(subjects.data);
     }
 
-    async function postHomework() {
+    async function updateHomework() {
         const homeworkData = {
             due_date: dueDate,
             short_description: shortDescription,
@@ -46,14 +47,13 @@ const HomeworkEditPage = () => {
             content: content
         }
 
-        const { data, error } = await supabase.from("homework").update([homeworkData]).match({ id: homeworkId });
-
-        if (error) {
-            console.error('Error posting data:', error);
-            return;
+        try {
+            const { data, error } = await supabase.from("homework").update([homeworkData]).match({ id: homeworkId });
+            if (error) { console.error('Error updating data:', error); }
+            console.log('Data posted successfully:', data);
+        } catch (error) {
+            console.error("An error has occured while trying to update the homework:", error)
         }
-
-        console.log('Data posted successfully:', data);
     }
 
     async function deleteHomework() {
@@ -83,6 +83,14 @@ const HomeworkEditPage = () => {
             <Link to={"/"}>
                 <Button>Zurück</Button>
             </Link>
+            <Dialog open={open} onClose={() => { setOpen(false) }}>
+                <DialogContent>
+                    <div>Änderungen wurden vorgenommen!</div>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => { setOpen(false) }}>Schließen</Button>
+                </DialogActions>
+            </Dialog>
             {homework
                 && (
                     <div>
@@ -113,7 +121,7 @@ const HomeworkEditPage = () => {
                             </LocalizationProvider>
                             <TextField label={"Kurzbeschreibung"} value={shortDescription} onChange={(e) => { setShortDescription(e.target.value) }}></TextField>
                             <TextField multiline maxRows={10} placeholder='Inhalt' value={content} onChange={(e) => { setContent(e.target.value) }}></TextField>
-                            <Button variant='contained' onClick={postHomework}>Speichern</Button>
+                            <Button variant='contained' onClick={() => { updateHomework(); setOpen(true); }}>Speichern</Button>
                             <Button variant='contained' onClick={deleteHomework} sx={{ backgroundColor: "red" }}>Löschen</Button>
                         </div>
                     </div>

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { createClient } from '@supabase/supabase-js';
 import { SubjectType } from '../services/SubjectType';
-import { Button, DialogTitle, FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material';
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -15,6 +15,7 @@ const HomeworkAddPage = () => {
     const [content, setContent] = useState("");
     const [subjects, setSubjects] = useState<any>();
     const [selectedSubjectId, setSelectedSubjectId]: any = useState<string | null>("");
+    const [open, setOpen] = useState(false);
 
     async function getSubjects() {
         const subjects = await supabase.from("subject").select();
@@ -49,6 +50,14 @@ const HomeworkAddPage = () => {
             <Link to={"/"}>
                 <Button>Zurück</Button>
             </Link>
+            <Dialog open={open} onClose={() => { setOpen(false) }}>
+                <DialogContent>
+                    <div>Hausübung wurde erstellt!</div>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => { setOpen(false) }}>Schließen</Button>
+                </DialogActions>
+            </Dialog>
             <DialogTitle>Hausübung hinzufügen</DialogTitle>
             <div className='p-4 flex flex-col gap-4 rounded-[1rem] overflow-hidden shadow-sm shadow-black'>
                 <FormControl fullWidth>
@@ -76,7 +85,7 @@ const HomeworkAddPage = () => {
                 </LocalizationProvider>
                 <TextField label={"Kurzbeschreibung"} value={shortDescription} onChange={(e) => { setShortDescription(e.target.value) }}></TextField>
                 <TextField multiline maxRows={10} placeholder='Inhalt' value={content} onChange={(e) => { setContent(e.target.value) }}></TextField>
-                <Button variant='contained' onClick={postHomework}>Speichern</Button>
+                <Button variant='contained' onClick={() => { postHomework(); setOpen(true); }}>Speichern</Button>
             </div>
         </div>
     );

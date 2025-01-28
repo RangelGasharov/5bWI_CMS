@@ -17,14 +17,24 @@ function HomeworkOverviewPage() {
     const [searchParams]: any = useSearchParams();
 
     async function getSubjects() {
-        const subjects: any = await supabase.from("subject").select();
-        setSubjects(subjects.data);
+        try {
+            const { data: subjects, error } = await supabase.from("subject").select();
+            if (error) { console.error("An error has occured while trying to fetch the subjects:", error); }
+            setSubjects(subjects);
+        } catch (error) {
+            console.error("An error has occured while trying to fetch the subjects:", error);
+        }
     }
 
     async function getHomeworks() {
-        const homeworks: any = await supabase.from("homework").select();
-        setHomeworks(homeworks.data);
-        setFilteredHomeworks(homeworks.data);
+        try {
+            const { data: homeworks, error } = await supabase.from("homework").select();
+            if (error) { console.error("An error has occured while trying to fetch the homeworks: ", error); }
+            setHomeworks(homeworks);
+            setFilteredHomeworks(homeworks);
+        } catch (error) {
+            console.error("An error has occured while trying to fetch the homeworks: ", error);
+        }
     }
 
     useEffect(() => {

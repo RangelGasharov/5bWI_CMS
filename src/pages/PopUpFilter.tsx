@@ -95,7 +95,7 @@ export default function PopUpFilter({ subjects }: PopUpFilterType) {
                             <InputLabel>Fach</InputLabel>
                             <Select
                                 label="Fach"
-                                defaultValue={selectedSubjectId}
+                                value={selectedSubjectId}
                                 onChange={(e: any) => handleSubjectChange(e.target.value)}
                             >
                                 <MenuItem value="">
